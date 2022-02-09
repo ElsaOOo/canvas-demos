@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Egg</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      height: 100vh;
+    }
+    #canvas {
+      margin: 0 auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="500" height="500"></canvas>
+
+  <script>
+    const canvasEle = document.getElementById('canvas');
+    const ctx = canvasEle.getContext('2d');
+
+    // 一些常量
+    const BODY_LINE_WIDTH = 20 // 鸡蛋身体线宽
+    const BODY_FILL_COLOR = '#f5deb3' // 鸡蛋身体填充颜色
+    const EYE_COLOR = '#000000' // 鸡蛋眼睛颜色
+    const EYE_LINE_WIDTH = 5 // 鸡蛋眼睛线宽
+    const MOUTH_COLOR = '#000000' // 鸡蛋嘴巴颜色
+    const MOUTH_LINE_WIDTH = 5 // 鸡蛋嘴巴线宽
+
+    // 鸡蛋身体 先画半个椭圆
+    function drawHead() {
+      ctx.beginPath();
+      ctx.ellipse(200, 200, 100, 150, 0, 0, Math.PI, true);
+      ctx.lineWidth = BODY_LINE_WIDTH;
+      ctx.stroke();
+      ctx.fillStyle = BODY_FILL_COLOR;
+      ctx.fill();
+    }
+
+    // 画一个半圆
+    function drawSemicircle() {
+      ctx.beginPath();
+      ctx.arc(200, 200, 100, 0, Math.PI);
+      ctx.lineWidth = BODY_LINE_WIDTH;
+      ctx.stroke();
+      ctx.fillStyle = BODY_FILL_COLOR;
+      ctx.fill();
+    }
+
+    // 画眼睛
+    function drawEyes() {
+      ctx.beginPath();
+      ctx.arc(165, 160, 15, 0, Math.PI, true);
+      ctx.lineWidth = EYE_LINE_WIDTH;
+      ctx.strokeStyle = EYE_COLOR;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(235, 160, 15, 0, Math.PI, true);
+      ctx.strokeStyle = EYE_COLOR;
+      ctx.stroke();
+    }
+
+    // 画嘴巴
+    function drawMouth() {
+      ctx.beginPath();
+      ctx.arc(200, 170, 10, 0, Math.PI);
+      ctx.lineWidth = MOUTH_LINE_WIDTH;
+      ctx.strokeStyle = MOUTH_COLOR;
+      ctx.stroke();
+    }
+
+    drawHead();
+    drawSemicircle();
+    drawEyes();
+    drawMouth();
+  </script>
+</body>
+</html>

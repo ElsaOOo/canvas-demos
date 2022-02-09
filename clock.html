@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="500" height="500"></canvas>
+</body>
+<script>
+  const canvas = document.getElementById('canvas')
+  const ctx = canvas.getContext('2d')
+
+  const FONT_HEIGHT = 15
+  const MARGIN = 35
+  const RADIUS = canvas.width / 2 - MARGIN
+  const HAND_TRUNCATION = canvas.width / 25
+  const HOUR_HAND_TRUNCATION = canvas.width / 10
+  const NUMERAL_SPACING = 20
+  const HAND_RADIUS = RADIUS + NUMERAL_SPACING
+
+
+  // 绘制一个钟面的圆形
+  function drawCircle() {
+    ctx.beginPath()
+    ctx.arc(canvas.width / 2,  canvas.height / 2, RADIUS, 0, Math.PI * 2, true)
+    ctx.stroke()
+  }
+
+  // 绘制时钟周围的数字
+  function drawNumerals() {
+    const numbers = [1,2,3,4,5,6,7,8,9,10,11,12]
+    let angle = 0
+    let numeralWidth = 0
+
+    numbers.forEach((number) => {
+      angle = Math.PI / 6 * (number - 3)
+      numeralWidth = ctx.measureText(number).width
+      ctx.fillText(number, canvas.width / 2 + Math.cos(angle) * HAND_RADIUS - numeralWidth / 2, canvas.height / 2 + Math.sin(angle) * HAND_RADIUS + FONT_HEIGHT / 3)
+    })
+  }
+
+  function drawCenter() {
+    ctx.beginPath()
+    ctx.arc(canvas.width / 2, canvas.height / 2, 5, 0, Math.PI * 2, true)
+    ctx.fill()
+  }
+
+  function drawHand(loc, isHour) {
+    const angle = Math.PI * 2 * (loc / 60) - Math.PI / 2
+    const handRadius = isHour ? RADIUS - HAND_TRUNCATION - HOUR_HAND_TRUNCATION : RADIUS - HAND_TRUNCATION
+    ctx.moveTo(canvas.width / 2, canvas.height / 2)
+    ctx.lineTo(canvas.width / 2 + Math.cos(angle) * handRadius, canvas.height / 2 + Math.sin(angle) * handRadius)
+    ctx.stroke()
+  }
+
+  function drawHands() {
+    const date = new Date()
+    let hour = date.getHours()
+    hour = hour > 12 ? hour - 12 : hour
+    drawHand(hour * 5 + (date.getMinutes() / 60) * 5, true)
+    drawHand(date.getMinutes(), false)
+    drawHand(date.getSeconds(), false)
+  }
+
+  function drawClock() {
+    // 清空全部canvas的内容
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    drawCircle()
+    drawNumerals()
+    drawCenter()
+    drawHands()
+  }
+  ctx.font = `${FONT_HEIGHT}px Arial`
+  const timer = setInterval(drawClock, 1000)
+  drawClock()
+</script>
+</html>
